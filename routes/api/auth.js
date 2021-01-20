@@ -4,7 +4,7 @@ const config = require("config");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
 const auth = require("../../middleware/auth");
-const { check, validationResult } = require("express-validator/check");
+const { check, validationResult } = require("express-validator");
 
 const User = require("../../models/User");
 
