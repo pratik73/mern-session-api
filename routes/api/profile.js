@@ -163,7 +163,7 @@ router.delete("/", auth, async (req, res) => {
   }
 });
 
-// @route   PUT api/profile/experiense
+// @route   PUT api/profile/experience
 // @desc    Add profile experience
 // @access  Private
 
@@ -218,7 +218,7 @@ router.put(
   }
 );
 
-// @route   DELETE api/profile/experiense/:exp_id
+// @route   DELETE api/profile/experience/:exp_id
 // @desc    Delete experience from profile
 // @access  Private
 
