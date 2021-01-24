@@ -1,4 +1,6 @@
 {
   "mongoURI": "mongodb+srv://prat123:prat123@deconnector.tqqsa.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "mysecrettoken"
+  "jwtSecret": "mysecrettoken",
+  "githubClientId": "76d04f9bc3e328397a77",
+  "githubClientSecret": "32df05922ca6aa8c717185c1487cef89a37bf595"
 }

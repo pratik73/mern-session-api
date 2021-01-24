@@ -1,4 +1,6 @@
 const express = require("express");
+const request = require("request");
+const config = require("config");
 const router = express.Router();
 const auth = require("../../middleware/auth");
 const { check, validationResult } = require("express-validator");
@@ -109,7 +111,6 @@ router.post(
 // @route   GET api/profile
 // @desc    Get all profiles
 // @access  Public
-
 router.get("/", async (req, res) => {
   try {
     const profiles = await Profile.find().populate("user", ["name", "avatar"]);
@@ -123,7 +124,6 @@ router.get("/", async (req, res) => {
 // @route   GET api/profile/user/:user_id
 // @desc    Get profile by user id
 // @access  Public
-
 router.get("/user/:user_id", async (req, res) => {
   try {
     const profile = await Profile.findOne({
@@ -147,7 +147,6 @@ router.get("/user/:user_id", async (req, res) => {
 // @route   DELETE api/profile
 // @desc    Delete profile, user & posts
 // @access  Private
-
 router.delete("/", auth, async (req, res) => {
   try {
     // @todo - remove users posts
@@ -166,7 +165,6 @@ router.delete("/", auth, async (req, res) => {
 // @route   PUT api/profile/experience
 // @desc    Add profile experience
 // @access  Private
-
 router.put(
   "/experience",
   [
@@ -221,7 +219,6 @@ router.put(
 // @route   DELETE api/profile/experience/:exp_id
 // @desc    Delete experience from profile
 // @access  Private
-
 router.delete("/experience/:exp_id", auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
@@ -244,7 +241,6 @@ router.delete("/experience/:exp_id", auth, async (req, res) => {
 // @route   PUT api/profile/education
 // @desc    Add profile education
 // @access  Private
-
 router.put(
   "/education",
   [
@@ -300,7 +296,6 @@ router.put(
 // @route   DELETE api/profile/education/:edu_id
 // @desc    Delete education from profile
 // @access  Private
-
 router.delete("/education/:edu_id", auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
@@ -314,6 +309,36 @@ router.delete("/education/:edu_id", auth, async (req, res) => {
     await profile.save();
 
     res.json(profile);
+  } catch (err) {
+    console.err(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route   GET api/profile/github/:username
+// @desc    Get user repos from Github
+// @access  Public
+router.get("/github/:username", async (req, res) => {
+  try {
+    const options = {
+      uri: `https://api.github.com/users/${
+        req.params.username
+      }/repos?per_page=5&sort=created:asc&client_id=${config.get(
+        "githubClientId"
+      )}&client_secret=${config.get("githubClientSecret")}`,
+      method: "GET",
+      headers: { "user-agent": "node.js" },
+    };
+
+    request(options, (error, response, body) => {
+      if (error) console.error(error);
+
+      if (response.statusCode != 200) {
+        return res.status(404).json({ msg: "No Github profile found" });
+      }
+
+      res.json(JSON.parse(body));
+    });
   } catch (err) {
     console.err(err.message);
     res.status(500).send("Server Error");
