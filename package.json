@@ -1,7 +1,7 @@
 {
   "name": "react",
   "version": "1.0.0",
-  "description": "social network fro developers",
+  "description": "social network for developers",
   "main": "server.js",
   "scripts": {
     "start": "node server",
