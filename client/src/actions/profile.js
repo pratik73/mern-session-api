@@ -1,122 +1,85 @@
 import axios from "axios";
 import { setAlert } from "./alert";
 
+// TODO - import required actions here
 import {
-  GET_PROFILE,
   UPDATE_PROFIlE,
   PROFILE_ERROR,
   ACCOUNT_DELETED,
   CLEAR_PROFIlE,
-  GET_PROFILES,
-  GET_REPOS,
 } from "./types";
 
 // Get current users profile
 export const getCurrentProfile = () => async (dispatch) => {
   try {
-    const res = await axios.get("/api/profile/me");
-
-    dispatch({
-      type: GET_PROFILE,
-      payload: res.data,
-    });
+    // TODO - get current user profile from server
+    // TODO - Save it to store
   } catch (err) {
-    dispatch({ type: CLEAR_PROFIlE });
-
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
-    });
+    // TODO - Clear profile if getting profile fails
+    // TODO - setup an alert when getting profile failed
   }
 };
 
 // Get all profiles
 export const getProfiles = () => async (dispatch) => {
-  dispatch({ type: CLEAR_PROFIlE });
+  // TODO - Clear profile before getting all profiles
 
   try {
-    const res = await axios.get("/api/profile");
-
-    dispatch({
-      type: GET_PROFILES,
-      payload: res.data,
-    });
+    // TODO - get all profiles
+    // TODO - Save it to store
   } catch (err) {
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
-    });
+    // TODO - display an error if something goes wrong
   }
 };
 
 // Get profile by ID
 export const getProfileById = (userId) => async (dispatch) => {
   try {
-    const res = await axios.get(`/api/profile/user/${userId}`);
-
-    dispatch({
-      type: GET_PROFILE,
-      payload: res.data,
-    });
+    // TODO - get profile by userId
+    // TODO - Save it to store
   } catch (err) {
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
-    });
+    // TODO - display an error when something goes wrong
   }
 };
 
 // Get github repos
 export const getGithubRepos = (username) => async (dispatch) => {
   try {
-    const res = await axios.get(`/api/profile/github/${username}`);
-
-    dispatch({
-      type: GET_REPOS,
-      payload: res.data,
-    });
+    // TODO - get github repos by github username
+    // TODO - Save it to store
   } catch (err) {
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
-    });
+    // TODO - display an error when something goes wrong
   }
 };
 
 // Create or update profile
-export const createProfile = (formData, history, edit = false) => async (
-  dispatch
-) => {
-  try {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-      },
-    };
+export const createProfile =
+  (formData, history, edit = false) =>
+  async (dispatch) => {
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
 
-    const res = await axios.post("/api/profile", formData, config);
+      // TODO - post to server with profile data to create a profile
 
-    dispatch({
-      type: GET_PROFILE,
-      payload: res.data,
-    });
+      // TODO - Save it to store
 
-    dispatch(setAlert(edit ? "Profile Updated" : "Profile Created", "success"));
+      // TODO - display an alert
 
-    if (!edit) {
-      history.push("/dashboard");
+      if (!edit) {
+        history.push("/dashboard");
+      }
+    } catch (err) {
+      const errors = err.response.data.errors;
+
+      // TODO - display an alert for each error messages
+
+      // TODO - display an error when something goes wrong
     }
-  } catch (err) {
-    const errors = err.response.data.errors;
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
-    }
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
-    });
-  }
-};
+  };
 
 // Add Experience
 export const addExperience = (formData, history) => async (dispatch) => {

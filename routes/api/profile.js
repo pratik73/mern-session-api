@@ -14,15 +14,12 @@ const Post = require("../../models/Post");
 // @access  Private
 router.get("/me", auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({
-      user: req.user.id,
-    }).populate("user", ["name", "avatar"]);
+    // TODO - Get user, name, avatar from database
 
-    if (!profile) {
-      return res.status(400).json({ msg: "There is no profile for this user" });
-    }
+    // TODO - return 400-Bad Request if profile not found
 
-    res.json(profile);
+    // TODO - return data in json format
+    res.json({ msg: "Incomplete Implementation" });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -36,10 +33,7 @@ router.post(
   "/",
   [
     auth,
-    [
-      check("status", "Status is required").not().isEmpty(),
-      check("skills", "Skills is required").not().isEmpty(),
-    ],
+    // TODO - check for missing mandatory parameters status, skills
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -64,46 +58,24 @@ router.post(
 
     //Build profile object
     const profileFields = {};
-    profileFields.user = req.user.id;
-    if (company) profileFields.company = company;
-    if (website) profileFields.website = website;
-    if (location) profileFields.location = location;
-    if (bio) profileFields.bio = bio;
-    if (status) profileFields.status = status;
-    if (githubusername) profileFields.githubusername = githubusername;
-    if (skills) {
-      profileFields.skills = Array.isArray(skills)
-        ? skills
-        : skills.split(",").map((skill) => " " + skill.trim());
-    }
-
-    // Build social object
-    profileFields.social = {};
-    if (youtube) profileFields.social.youtube = youtube;
-    if (twitter) profileFields.social.twitter = twitter;
-    if (facebook) profileFields.social.facebook = facebook;
-    if (linkedin) profileFields.social.linkedin = linkedin;
-    if (instagram) profileFields.social.instagram = instagram;
+    // TODO - Build profile object here
 
     try {
-      let profile = await Profile.findOne({ user: req.user.id });
+      // TODO - find if profile exists
 
-      if (profile) {
-        // Update
-        profile = await Profile.findOneAndUpdate(
-          { user: req.user.id },
-          { $set: profileFields },
-          { new: true }
-        );
-
-        return res.json(profile);
-      }
+      //if (profile) {
+      // Update
+      // TODO - make an update db call if found
+      // TODO - return updated profile
+      return res.send({ msg: "Incomplete Implementation" });
+      //}
 
       // Create
-      profile = new Profile(profileFields);
+      // TODO - create instance of Profile model
 
-      await profile.save();
-      return res.json(profile);
+      // TODO - save profile to db
+      // TODO - return created profile
+      // return res.status({ msg: "Incomplete Implementation" });
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");
@@ -116,8 +88,9 @@ router.post(
 // @access  Public
 router.get("/", async (req, res) => {
   try {
-    const profiles = await Profile.find().populate("user", ["name", "avatar"]);
-    res.json(profiles);
+    // TODO - get all profiles from db
+    // TODO - return profiles
+    return res.send({ msg: "Incomplete Implementation" });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -129,15 +102,12 @@ router.get("/", async (req, res) => {
 // @access  Public
 router.get("/user/:user_id", async (req, res) => {
   try {
-    const profile = await Profile.findOne({
-      user: req.params.user_id,
-    }).populate("user", ["name", "avatar"]);
+    // TODO- get user, name, avatar of the user with user_id in request
 
-    if (!profile) {
-      return res.status(400).json({ msg: "Profile not found" });
-    }
+    // TODO - return 400 if user profile not found
 
-    res.json(profile);
+    // TODO - return user profile
+    return res.send({ msg: "Incomplete Implementation" });
   } catch (err) {
     console.error(err.message);
     if (err.kind == "ObjectId") {
@@ -152,14 +122,13 @@ router.get("/user/:user_id", async (req, res) => {
 // @access  Private
 router.delete("/", auth, async (req, res) => {
   try {
-    // Remove user posts
-    await Post.deleteMany({ user: req.user.id });
-    // Remove profile
-    await Profile.findOneAndRemove({ user: req.user.id });
-    //Remove user
-    await User.findOneAndRemove({ _id: req.user.id });
+    // TODO - Remove user posts
 
-    res.json({ msg: "User deleted" });
+    // TODO - Remove profile
+
+    //TODO - Remove user
+
+    return res.send({ msg: "Incomplete Implementation" });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -185,15 +154,8 @@ router.put(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const {
-      title,
-      company,
-      location,
-      from,
-      to,
-      current,
-      description,
-    } = req.body;
+    const { title, company, location, from, to, current, description } =
+      req.body;
 
     const newExp = {
       title,
@@ -262,15 +224,8 @@ router.put(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const {
-      school,
-      degree,
-      fieldofstudy,
-      from,
-      to,
-      current,
-      description,
-    } = req.body;
+    const { school, degree, fieldofstudy, from, to, current, description } =
+      req.body;
 
     const newEdu = {
       school,
