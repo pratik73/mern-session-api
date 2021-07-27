@@ -1,0 +1,321 @@
+{
+	"info": {
+		"_postman_id": "b20374c0-d766-49b6-9eae-2811be959bb3",
+		"name": "mern-profiles",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "register-user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Patrick Doe\",\r\n    \"email\": \"pat@gmail.com\",\r\n    \"password\": \"123456\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-update-profile",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const options = {\r",
+							"    url: \"http://localhost:5000/api/auth\",\r",
+							"    method: 'POST',\r",
+							"    header: { 'content-type': 'application/json' },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            \"email\": pm.collectionVariables.get(\"email\"),\r",
+							"            \"password\": pm.collectionVariables.get(\"password\")\r",
+							"        })\r",
+							"\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"pm.sendRequest(options, function (err, res) {\r",
+							"    var jsonData = res.json();\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    }\r",
+							"    else {\r",
+							"        pm.environment.set(\"token\", jsonData.token);\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{token}}",
+						"description": "Patrick's token",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"company\": \"Accenture\",\r\n    \"status\": \"Developer\",\r\n    \"website\": \"https://www.pat-accenture.com\",\r\n    \"skills\": \"HTML, CSS, PHP, JS\",\r\n    \"location\": \"Manhattan, NY\",\r\n    \"bio\": \"I am a senior developer and instructor for Accenture\",\r\n    \"githubusername\": \"pat-accenture\",\r\n    \"twitter\": \"https://twitter.com/pat-accenture\",\r\n    \"facebook\": \"https://facebook.com/pat-accenture\",\r\n    \"youtube\": \"https://youtube.com/pat-accenture\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-profile",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const options = {\r",
+							"    url: \"http://localhost:5000/api/auth\",\r",
+							"    method: 'POST',\r",
+							"    header: { 'content-type': 'application/json' },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            \"email\": pm.collectionVariables.get(\"email\"),\r",
+							"            \"password\": pm.collectionVariables.get(\"password\")\r",
+							"        })\r",
+							"\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"pm.sendRequest(options, function (err, res) {\r",
+							"    var jsonData = res.json();\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    }\r",
+							"    else {\r",
+							"        pm.environment.set(\"token\", jsonData.token);\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/api/profile/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"profile",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-profiles",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-profile-by-userid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/profile/user/60afa9637b6d8d7a0c0ee0e9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"profile",
+						"user",
+						"60afa9637b6d8d7a0c0ee0e9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete-profile",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const options = {\r",
+							"    url: \"http://localhost:5000/api/auth\",\r",
+							"    method: 'POST',\r",
+							"    header: { 'content-type': 'application/json' },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            \"email\": pm.collectionVariables.get(\"email\"),\r",
+							"            \"password\": pm.collectionVariables.get(\"password\")\r",
+							"        })\r",
+							"\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"pm.sendRequest(options, function (err, res) {\r",
+							"    var jsonData = res.json();\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    }\r",
+							"    else {\r",
+							"        pm.environment.set(\"token\", jsonData.token);\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/api/profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "email",
+			"value": "pat@gmail.com"
+		},
+		{
+			"key": "password",
+			"value": "ibnnBf.8D2ap6YH"
+		}
+	]
+}
