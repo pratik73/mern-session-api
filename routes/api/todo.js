@@ -23,17 +23,10 @@ router.get("/", async (req, res) => {
   return res.send({ msg: "Incomplete Implementation" });
 });
 
-// @route   GET api/todo/user/:user_id
-// @desc    Get todo by user id
-// @access  Public
-router.get("/user/:user_id", async (req, res) => {
-  return res.send({ msg: "Incomplete Implementation" });
-});
-
 // @route   DELETE api/todo
-// @desc    Delete todo, user
+// @desc    Delete todo
 // @access  Private
-router.delete("/", auth, async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   return res.send({ msg: "Incomplete Implementation" });
 });
 
