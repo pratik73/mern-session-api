@@ -5,14 +5,14 @@ const auth = require("../../middleware/auth");
 // @route   GET api/todo/me
 // @desc    Get current users todos
 // @access  Private
-router.get("/me", async (req, res) => {
+router.get("/me", auth, async (req, res) => {
   res.json({ msg: "Incomplete Implementation" });
 });
 
 // @route   POST api/todo
 // @desc    Create or update a todo
 // @access  Private
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   return res.send({ msg: "Incomplete Implementation" });
 });
 
@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
 // @route   DELETE api/todo
 // @desc    Delete todo
 // @access  Private
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   return res.send({ msg: "Incomplete Implementation" });
 });
 
