@@ -10,6 +10,7 @@ const TodoSchema = new mongoose.Schema({
   },
   title: {
     type: String,
+    required: true,
   },
   priority: {
     type: String,
@@ -20,7 +21,6 @@ const TodoSchema = new mongoose.Schema({
   },
   labels: {
     type: [String],
-    required: true,
   },
   date: {
     type: Date,
