@@ -7,6 +7,18 @@ const { check, validationResult } = require("express-validator");
 // @desc    Get current users todos
 // @access  Private
 router.get("/me", auth, async (req, res) => {
+  try {
+    const todo = undefined;
+    if (!todo) {
+      return res.status(400).json({ msg: "There are no todos for this user" });
+    }
+
+    res.json(todo);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+
   res.json({ msg: "Incomplete Implementation" });
 });
 
@@ -27,6 +39,17 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
+    try {
+      // find profile
+      // update if exists
+      // create if it does not
+
+      res.send("todo created/updated");
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+
     return res.send({ msg: "Incomplete Implementation" });
   }
 );
@@ -35,6 +58,15 @@ router.post(
 // @desc    Get all todos
 // @access  Public
 router.get("/", async (req, res) => {
+  try {
+    // get all todos
+
+    res.send("All todos");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+
   return res.send({ msg: "Incomplete Implementation" });
 });
 
@@ -42,6 +74,14 @@ router.get("/", async (req, res) => {
 // @desc    Delete todo, user
 // @access  Private
 router.delete("/:id", auth, async (req, res) => {
+  try {
+    // Remove todo
+    res.json({ msg: "Todo deleted" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+
   return res.send({ msg: "Incomplete Implementation" });
 });
 
