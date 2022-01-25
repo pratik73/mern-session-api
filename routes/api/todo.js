@@ -1,7 +1,7 @@
 const express = require("express");
+const { check, validationResult } = require("express-validator");
 const router = express.Router();
 const auth = require("../../middleware/auth");
-const { check, validationResult } = require("express-validator");
 const Todo = require("../../models/Todo");
 
 // @route   GET api/todo/me
@@ -19,9 +19,10 @@ router.get("/me", auth, async (req, res) => {
 
     res.json(todo);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
+    console.log(err.message);
+    res.status(500).send("Internal Server Error");
   }
+  res.json({ msg: "Incomplete Implementation" });
 });
 
 // @route   POST api/todo
@@ -32,8 +33,8 @@ router.post(
   [
     auth,
     [
+      check("category", "Category is required").not().isEmpty(),
       check("title", "Title is required").not().isEmpty(),
-      check("status", "Status is required").not().isEmpty(),
     ],
   ],
   async (req, res) => {
@@ -43,16 +44,11 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { category, title, priority, status, labels, date } = req.body;
-
     try {
-      // build todo instance
-      const todoFields = {};
-      todoFields.user = req.user.id;
-      todoFields.title = title;
-      todoFields.status = status;
+      const { title, category, status, priority, labels, date } = req.body;
 
-      if (category) todoFields.category = category;
+      const todoFields = { title, category };
+      if (status) todoFields.status = status;
       if (priority) todoFields.priority = priority;
       if (date) todoFields.date = date;
       if (labels) {
@@ -65,6 +61,7 @@ router.post(
 
       if (todo) {
         // Update
+        console.log("Updating records");
         todo = await Todo.findOneAndUpdate(
           { user: req.user.id },
           { $set: todoFields },
@@ -74,14 +71,15 @@ router.post(
         return res.json(todo);
       }
 
-      //Create
+      // Create
       todo = new Todo(todoFields);
 
       await todo.save();
+
       return res.json(todo);
     } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server Error");
+      console.log(err.message);
+      res.status(500).send("Internal Server Error");
     }
   }
 );
@@ -94,25 +92,22 @@ router.get("/", async (req, res) => {
     const todo = await Todo.find().populate("user", ["name", "avatar"]);
     res.json(todo);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
+    console.log(err.message);
+    res.status(500).send("Internal Server Error");
   }
   return res.send({ msg: "Incomplete Implementation" });
 });
 
 // @route   DELETE api/todo
-// @desc    Delete todo
+// @desc    Delete todo, user
 // @access  Private
 router.delete("/:id", auth, async (req, res) => {
   try {
-    // Remove todo
-    await Todo.findOneAndRemove({ todo: req.id });
-
-    res.json({ msg: "Todo deleted" });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
+    console.log(err.message);
+    res.status(500).send("Internal Server Error");
   }
+  return res.send({ msg: "Incomplete Implementation" });
 });
 
 module.exports = router;
